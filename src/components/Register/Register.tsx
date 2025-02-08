@@ -31,7 +31,6 @@ const Register: FC = () => {
 
   return (
     <div className={styles.registerContainer}>
-      {/* Left Panel: Register Form */}
       <div className={styles.leftPanel}>
         <div className={styles.registerCard}>
           <h2 className={styles.registerTitle}>Register</h2>
@@ -79,7 +78,6 @@ const Register: FC = () => {
         </div>
       </div>
 
-      {/* Right Panel: Background Image */}
       <div className={styles.rightPanel}></div>
     </div>
   );
