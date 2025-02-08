@@ -1,17 +1,13 @@
-import { FC } from "react";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import { useRouter } from "next/router";
+import styles from "./Register.module.css";
 
 const Register: FC = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (values: {
-    name: string;
-    email: string;
-    password: string;
-  }) => {
+  const handleSubmit = async (values: { name: string; email: string; password: string }) => {
     setLoading(true);
     const res = await fetch("/api/auth/register", {
       method: "POST",
@@ -30,33 +26,30 @@ const Register: FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "auto", marginTop: 100 }}>
-      <h2>Register</h2>
-      <Form onFinish={handleSubmit}>
-        <Form.Item
-          name="name"
-          rules={[
-            { required: true, message: "Name is required" },
-          ]}
-        >
-          <Input placeholder="Name" />
-        </Form.Item>
-        <Form.Item
-          name="email"
-          rules={[{ required: true, message: "Email is required" }]}
-        >
-          <Input placeholder="Email" />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Password is required" }]}
-        >
-          <Input.Password placeholder="Password" />
-        </Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading} block>
-          Register
-        </Button>
-      </Form>
+    <div className={styles.registerContainer}>
+      {/* Left Panel: Register Form */}
+      <div className={styles.leftPanel}>
+        <div className={styles.registerCard}>
+          <h2 className={styles.registerTitle}>Register</h2>
+          <Form onFinish={handleSubmit} layout="vertical">
+            <Form.Item name="name" rules={[{ required: true, message: "Name is required" }]}>
+              <Input placeholder="Name" className={styles.inputField} />
+            </Form.Item>
+            <Form.Item name="email" rules={[{ required: true, message: "Email is required" }]}>
+              <Input placeholder="Email" className={styles.inputField} />
+            </Form.Item>
+            <Form.Item name="password" rules={[{ required: true, message: "Password is required" }]}>
+              <Input.Password placeholder="Password" className={styles.inputField} />
+            </Form.Item>
+            <Button type="primary" htmlType="submit" loading={loading} block className={styles.registerButton}>
+              Register
+            </Button>
+          </Form>
+        </div>
+      </div>
+
+      {/* Right Panel: Background Image */}
+      <div className={styles.rightPanel}></div>
     </div>
   );
 };
