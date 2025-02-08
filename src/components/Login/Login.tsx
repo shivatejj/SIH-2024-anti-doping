@@ -32,24 +32,40 @@ const Login: FC = () => {
         <div className={styles.loginCard}>
           <h2 className={styles.loginTitle}>Login</h2>
           <Form onFinish={handleSubmit} layout="vertical">
-            <Form.Item name="email" rules={[{ required: true, message: "Email is required" }]}> 
-              <Input 
-                prefix={<UserOutlined className="input-icon" />} 
-                placeholder="Email" 
+            <Form.Item
+              name="email"
+              rules={[{ required: true, message: "Email is required" }]}
+            >
+              <Input
+                prefix={<UserOutlined className="input-icon" />}
+                placeholder="Email"
                 className={styles.inputField}
               />
             </Form.Item>
-            <Form.Item name="password" rules={[{ required: true, message: "Password is required" }]}> 
-              <Input.Password 
-                prefix={<LockOutlined className="input-icon" />} 
-                placeholder="Password" 
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: "Password is required" }]}
+            >
+              <Input.Password
+                prefix={<LockOutlined className="input-icon" />}
+                placeholder="Password"
                 className={styles.inputField}
               />
             </Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading} block className={styles.loginButton}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              block
+              className={styles.loginButton}
+            >
               Login
             </Button>
-            <Button onClick={() => router.push('/register')} block className={styles.signupButton}>
+            <Button
+              onClick={() => router.push("/register")}
+              block
+              className={styles.signupButton}
+            >
               Sign Up
             </Button>
           </Form>

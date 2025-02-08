@@ -7,7 +7,11 @@ const Register: FC = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (values: { name: string; email: string; password: string }) => {
+  const handleSubmit = async (values: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
     setLoading(true);
     const res = await fetch("/api/auth/register", {
       method: "POST",
@@ -32,17 +36,44 @@ const Register: FC = () => {
         <div className={styles.registerCard}>
           <h2 className={styles.registerTitle}>Register</h2>
           <Form onFinish={handleSubmit} layout="vertical">
-            <Form.Item name="name" rules={[{ required: true, message: "Name is required" }]}>
+            <Form.Item
+              name="name"
+              rules={[{ required: true, message: "Name is required" }]}
+            >
               <Input placeholder="Name" className={styles.inputField} />
             </Form.Item>
-            <Form.Item name="email" rules={[{ required: true, message: "Email is required" }]}>
+            <Form.Item
+              name="email"
+              rules={[{ required: true, message: "Email is required" }]}
+            >
               <Input placeholder="Email" className={styles.inputField} />
             </Form.Item>
-            <Form.Item name="password" rules={[{ required: true, message: "Password is required" }]}>
-              <Input.Password placeholder="Password" className={styles.inputField} />
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: "Password is required" }]}
+            >
+              <Input.Password
+                placeholder="Password"
+                className={styles.inputField}
+              />
             </Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading} block className={styles.registerButton}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              block
+              className={styles.registerButton}
+            >
               Register
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => router.push("/login")}
+              loading={loading}
+              block
+              className={styles.loginButton}
+            >
+              Login
             </Button>
           </Form>
         </div>
