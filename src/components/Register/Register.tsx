@@ -4,11 +4,14 @@ import { Form, Input, Button, message } from "antd";
 import { useRouter } from "next/router";
 
 const Register: FC = () => {
-
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (values: { name: string; email: string; password: string }) => {
+  const handleSubmit = async (values: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
     setLoading(true);
     const res = await fetch("/api/auth/register", {
       method: "POST",
@@ -30,13 +33,24 @@ const Register: FC = () => {
     <div style={{ maxWidth: 400, margin: "auto", marginTop: 100 }}>
       <h2>Register</h2>
       <Form onFinish={handleSubmit}>
-        <Form.Item name="name" rules={[{ required: true, message: "Name is required" }]}>
+        <Form.Item
+          name="name"
+          rules={[
+            { required: true, message: "Name is required" },
+          ]}
+        >
           <Input placeholder="Name" />
         </Form.Item>
-        <Form.Item name="email" rules={[{ required: true, message: "Email is required" }]}>
+        <Form.Item
+          name="email"
+          rules={[{ required: true, message: "Email is required" }]}
+        >
           <Input placeholder="Email" />
         </Form.Item>
-        <Form.Item name="password" rules={[{ required: true, message: "Password is required" }]}>
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: "Password is required" }]}
+        >
           <Input.Password placeholder="Password" />
         </Form.Item>
         <Button type="primary" htmlType="submit" loading={loading} block>
@@ -45,6 +59,6 @@ const Register: FC = () => {
       </Form>
     </div>
   );
-}
+};
 
 export default Register;
