@@ -1,23 +1,12 @@
-import { useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/router";
-import { Button } from "antd";
+import dynamic from "next/dynamic";
 
-export default function Dashboard() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+const Dashboard = dynamic(
+  () => import("../components/Dashboard/Dashboard"),
+  { ssr: false, loading: () => <p>Loading...</p> }
+)
 
-  if (status === "loading") return <p>Loading...</p>;
-  if (!session) {
-    router.push("/login");
-    return null;
-  }
-
-  return (
-    <div style={{ textAlign: "center", marginTop: 50 }}>
-      <h1>Welcome, {session.user?.name}</h1>
-      <Button type="primary" onClick={() => signOut()}>
-        Logout
-      </Button>
-    </div>
-  );
+const DashboardPage = () => {
+  <Dashboard />
 }
+
+export default DashboardPage;
