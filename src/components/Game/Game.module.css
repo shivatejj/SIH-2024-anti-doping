@@ -1,0 +1,68 @@
+.container {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  color: white;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.gameBox {
+  width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.itemsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.item {
+  display: inline-block;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+
+.item:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.stats {
+  font-size: 22px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background: white;
+  color: black;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  display: block;
+}
+
+.correct {
+  color: green;
+}
+
+.wrong {
+  color: red;
+}
