@@ -1,10 +1,19 @@
 import dynamic from "next/dynamic";
 
-const Dashboard = dynamic(
-  () => import("../components/Dashboard/Dashboard"),
-  { ssr: false, loading: () => <p>Loading...</p> }
-)
+const AppLayout = dynamic(() => import("../components/Layout/Layout"), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+});
 
-const DashboardPage = () => <Dashboard />
+const Dashboard = dynamic(() => import("../components/Dashboard/Dashboard"), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+});
+
+const DashboardPage = () => (
+  <AppLayout>
+    <Dashboard />
+  </AppLayout>
+);
 
 export default DashboardPage;
