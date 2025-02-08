@@ -5,8 +5,6 @@ const Dashboard = dynamic(
   { ssr: false, loading: () => <p>Loading...</p> }
 )
 
-const DashboardPage = () => {
-  <Dashboard />
-}
+const DashboardPage = () => <Dashboard />
 
 export default DashboardPage;

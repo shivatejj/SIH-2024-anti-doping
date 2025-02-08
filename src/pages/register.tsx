@@ -5,8 +5,6 @@ const Register = dynamic(
   { ssr: false, loading: () => <p>Loading...</p> }
 )
 
-const RegisterPage = () => {
-  <Register />
-}
+const RegisterPage = () => <Register />
 
 export default RegisterPage;

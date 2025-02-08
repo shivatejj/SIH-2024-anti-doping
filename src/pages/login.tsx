@@ -5,8 +5,6 @@ const Login = dynamic(
   { ssr: false, loading: () => <p>Loading...</p> }
 )
 
-const LoginPage = () => {
-  <Login />
-}
+const LoginPage = () => <Login />
 
 export default LoginPage;
