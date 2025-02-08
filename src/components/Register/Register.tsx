@@ -1,10 +1,12 @@
 import { FC } from "react";
 import { useState } from "react";
 import { Form, Input, Button, message } from "antd";
+import { useRouter } from "next/router";
 
 const Register: FC = () => {
 
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (values: { name: string; email: string; password: string }) => {
     setLoading(true);
@@ -18,6 +20,7 @@ const Register: FC = () => {
 
     if (res.ok) {
       message.success("Registration successful!");
+      router.push("/login");
     } else {
       message.error("Error registering user");
     }

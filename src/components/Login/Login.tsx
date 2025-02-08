@@ -40,6 +40,9 @@ const Login: FC = () => {
         <Button type="primary" htmlType="submit" loading={loading} block>
           Login
         </Button>
+        <Button type="default" onClick={() => router.push('/register')} block>
+          SIGN IN
+        </Button>
       </Form>
     </div>
   );
