@@ -33,17 +33,17 @@ const assets = [
   },
   {
     type: "gif",
-    src: "/gifs/gif1.gif",
+    src: "/Gifs/gif1.gif",
     text: "Be a Champion – Play by the Rules!",
   },
   {
     type: "gif",
-    src: "/gifs/gif2.gif",
+    src: "/Gifs/gif2.gif",
     text: "Fair Play is the Only Way to Play!",
   },
   {
     type: "gif",
-    src: "/gifs/gif3.gif",
+    src: "/Gifs/gif3.gif",
     text: "Stay Strong, Stay Clean, Stay Honest!",
   },
 ];
