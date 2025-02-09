@@ -8,27 +8,27 @@ import styles from "./Scroll.module.css";
 const assets = [
   {
     type: "image",
-    src: "/posters/poster1.jpg",
+    src: "/Posters/poster1.jpg",
     text: "Say NO to Doping! Play Fair, Stay Clean!",
   },
   {
     type: "image",
-    src: "/posters/poster2.jpg",
+    src: "/Posters/poster2.jpg",
     text: "Your Talent, Your Hard Work – No Shortcuts!",
   },
   {
     type: "image",
-    src: "/posters/poster3.jpg",
+    src: "/Posters/poster3.jpg",
     text: "Doping Destroys Dreams. Stay True to the Game!",
   },
   {
     type: "image",
-    src: "/posters/poster4.jpg",
+    src: "/Posters/poster4.jpg",
     text: "Rise Above, Play True: Ditch the Doping, Shine Through",
   },
   {
     type: "image",
-    src: "/posters/poster5.jpg",
+    src: "/Posters/poster5.jpg",
     text: "The evidence is clear: invest in prevention",
   },
   {
