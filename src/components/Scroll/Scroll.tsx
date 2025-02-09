@@ -22,6 +22,16 @@ const assets = [
     text: "Doping Destroys Dreams. Stay True to the Game!",
   },
   {
+    type: "image",
+    src: "/posters/poster4.jpg",
+    text: "Rise Above, Play True: Ditch the Doping, Shine Through",
+  },
+  {
+    type: "image",
+    src: "/posters/poster5.jpg",
+    text: "The evidence is clear: invest in prevention",
+  },
+  {
     type: "gif",
     src: "/gifs/gif1.gif",
     text: "Be a Champion – Play by the Rules!",
