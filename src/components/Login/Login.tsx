@@ -21,7 +21,7 @@ const Login: FC = () => {
       message.error(result.error);
     } else {
       message.success("Login successful!");
-      router.push("/dashboard");
+      router.push("/home");
     }
   };
 
