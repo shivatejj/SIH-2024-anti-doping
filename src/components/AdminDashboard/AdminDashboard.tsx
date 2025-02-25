@@ -3,7 +3,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { Button } from "antd";
 import { signOut } from "next-auth/react";
 
-const Dashboard: FC = () => {
+const AdminDashboard: FC = () => {
+
   const { user } = useAuth();
 
   return (
@@ -14,7 +15,7 @@ const Dashboard: FC = () => {
         Logout
       </Button>
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default AdminDashboard;

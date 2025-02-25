@@ -1,8 +1,9 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import User from "../../../models/User"; // User model (see below)
 import { connectDB } from "@/lib/mongodb";
+import User from "@/models/User";
+import Activity from "@/models/Activity";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -29,20 +30,21 @@ export const authOptions: NextAuthOptions = {
           throw new Error("❌ Invalid credentials");
         }
 
-        return { id: user._id, name: user.name, email: user.email };
+        await Activity.create({ name: user.name, email: user.email });
+        return { id: user._id, name: user.name, email: user.email, role: user.role };
       },
     }),
   ],
   callbacks: {
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.sub!;
-      }
+      session.user.id = token.id;
+      session.user.role = token.role;
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.sub = user.id;
+        token.id = user.id;
+        token.role = user.role;
       }
       return token;
     },
