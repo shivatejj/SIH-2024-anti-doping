@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import User from "../../../models/User"; // User model (see below)
 import { connectDB } from "@/lib/mongodb";
+import Activity from "@/models/Activity";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -29,6 +30,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error("❌ Invalid credentials");
         }
 
+        await Activity.create({ name: user.name, email: user.email });
         return { id: user._id, name: user.name, email: user.email };
       },
     }),
