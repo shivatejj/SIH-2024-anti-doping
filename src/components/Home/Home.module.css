@@ -1,5 +1,7 @@
+/* Base Container */
 .container {
   display: flex;
+  flex-wrap: wrap;
   width: 100vw;
   height: 100vh;
   background: url("/images/home_bg.jpg") no-repeat center center/cover;
@@ -16,9 +18,15 @@
   justify-content: start;
   padding: 10px;
   gap: 15px;
+  min-width: 300px;
 }
 
-.videoBox {
+/* Responsive Box Sizes */
+.videoBox,
+.textBox,
+.audioBox,
+.rulesBox,
+.smallVideoBox {
   width: 90%;
   max-width: 400px;
   background: rgba(0, 0, 0, 0.7);
@@ -27,36 +35,20 @@
   text-align: center;
 }
 
-.textBox {
-  width: 90%;
-  max-width: 400px;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 10px;
-  border-radius: 10px;
+.textBox,
+.rulesBox {
   text-align: left;
-  font-size: 14px; /* Reduced text size */
+  font-size: 14px;
 }
 
-.audioBox {
-  width: 90%;
-  max-width: 350px;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.audioPlayer {
-  width: 100%;
-}
-
-/* Middle Section - Full Poster */
+/* Middle Section */
 .middleSection {
   flex: 2;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 10px;
+  min-width: 400px;
 }
 
 .poster {
@@ -64,6 +56,7 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
   width: 100%;
   height: auto;
+  max-width: 600px;
 }
 
 /* Right Section */
@@ -75,24 +68,77 @@
   justify-content: start;
   padding: 10px;
   gap: 15px;
+  min-width: 300px;
 }
 
-.rulesBox {
-  width: 90%;
-  max-width: 400px;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 10px;
-  border-radius: 10px;
-  text-align: left;
-  font-size: 14px;
+/* Responsive Design */
+
+/* Laptops & Tablets */
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .leftSection,
+  .middleSection,
+  .rightSection {
+    flex: none;
+    width: 100%;
+    min-width: unset;
+  }
+
+  .poster {
+    max-width: 90%;
+  }
+
+  .textBox,
+  .rulesBox {
+    font-size: 13px;
+  }
 }
 
-.smallVideoBox {
-  width: 90%;
-  max-width: 300px;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-  margin-top: auto; /* Pushes video to the bottom */
+/* Mobile Devices */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+    padding: 10px;
+  }
+
+  .videoBox,
+  .textBox,
+  .audioBox,
+  .rulesBox,
+  .smallVideoBox {
+    width: 95%;
+    max-width: 350px;
+    padding: 8px;
+  }
+
+  .poster {
+    max-width: 100%;
+  }
+
+  .textBox,
+  .rulesBox {
+    font-size: 12px;
+  }
+}
+
+/* Small Mobile Screens */
+@media (max-width: 480px) {
+  .textBox,
+  .rulesBox {
+    font-size: 11px;
+  }
+
+  .poster {
+    max-width: 100%;
+  }
+
+  .videoBox,
+  .smallVideoBox {
+    max-width: 300px;
+  }
 }

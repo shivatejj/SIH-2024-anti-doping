@@ -7,7 +7,7 @@ const { Header, Content, Footer } = Layout;
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
-  const { data: session } = useSession(); // Get authentication state
+  const { data: session } = useSession();
 
   return (
     <Layout className={styles.layout}>
@@ -16,7 +16,19 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className={styles.logo} onClick={() => router.push("/")}>
           Anti-Doping Education
         </div>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          defaultSelectedKeys={["1"]}
+          className={styles.menu}
+          style={{
+            flexGrow: 1,
+            display: "flex",
+            justifyContent: "center",
+            overflow: "visible",
+            whiteSpace: "nowrap",
+          }}
+        >
           <Menu.Item key="1" onClick={() => router.push("/home")}>
             Home
           </Menu.Item>
