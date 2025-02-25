@@ -12,10 +12,10 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {/* Header Section */}
       <Header className={styles.header}>
         <div className={styles.logo} onClick={() => router.push("/")}>
-          My App
+          Anti-Doping Education
         </div>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
-          <Menu.Item key="1" onClick={() => router.push("/")}>
+          <Menu.Item key="1" onClick={() => router.push("/home")}>
             Home
           </Menu.Item>
           <Menu.Item key="2" onClick={() => router.push("/game")}>

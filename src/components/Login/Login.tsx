@@ -14,7 +14,7 @@ const Login: FC = () => {
   useEffect(() => {
     if (status === 'authenticated') {
       if (session?.user.role === 'user') {
-        router.push("/dashboard");
+        router.push("/home");
       } else {
         router.push('/admin-dashboard');
       }
