@@ -36,6 +36,18 @@
   padding: 20px;
 }
 
+/* Title Styling */
+.title {
+  position: absolute;
+  top: 10%;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  width: 100%;
+  z-index: 3;
+}
+
 .assetContainer {
   display: flex;
   flex-direction: column;

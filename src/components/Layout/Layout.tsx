@@ -1,11 +1,13 @@
 import { Layout, Menu } from "antd";
 import { useRouter } from "next/router";
 import styles from "./Layout.module.css";
+import { signOut, useSession } from "next-auth/react";
 
 const { Header, Content, Footer } = Layout;
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
+  const { data: session } = useSession(); // Get authentication state
 
   return (
     <Layout className={styles.layout}>
@@ -27,6 +29,15 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <Menu.Item key="4" onClick={() => router.push("/leaderboard")}>
             LeaderBoard
           </Menu.Item>
+          {session ? (
+            <Menu.Item key="5" onClick={() => signOut({ callbackUrl: "/" })}>
+              Logout
+            </Menu.Item>
+          ) : (
+            <Menu.Item key="6" onClick={() => router.push("/login")}>
+              Login
+            </Menu.Item>
+          )}
         </Menu>
       </Header>
 

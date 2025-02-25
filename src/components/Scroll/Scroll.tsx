@@ -63,6 +63,9 @@ const Home = () => {
     <div className={styles.container}>
       {/* Left Section */}
       <div className={styles.leftSection}>
+        {/* Title */}
+        <h1 className={styles.title}>Gamification of Anti-Doping Education</h1>
+
         <div className={styles.assetWrapper}>
           <div className={`${styles.assetContainer} ${styles.visible}`}>
             {assets[index].type === "image" ? (
@@ -74,6 +77,7 @@ const Home = () => {
                 className={styles.asset}
               />
             ) : (
+              // eslint-disable-next-line @next/next/no-img-element
               <img src={assets[index].src} alt="GIF" className={styles.asset} />
             )}
           </div>
