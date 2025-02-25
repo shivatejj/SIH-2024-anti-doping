@@ -6,9 +6,15 @@ import styles from "./Home.module.css";
 const Home: React.FC = () => {
   return (
     <div className={styles.container}>
+      {/* Main Heading */}
+      <h1 className={styles.mainHeading}>
+        Gamification of Anti-Doping Education
+      </h1>
+      <h2 className={styles.subHeading}>Multi-Media Content</h2>
+
       {/* Left Section */}
       <div className={styles.leftSection}>
-        {/* Video on Top */}
+        {/* Video Box */}
         <div className={styles.videoBox}>
           <h2>Watch This Video</h2>
           <ReactPlayer
@@ -19,18 +25,20 @@ const Home: React.FC = () => {
           />
         </div>
 
-        {/* Small Matter Below Video */}
+        {/* Optimized Text Box to Fit Audio Box */}
         <div className={styles.textBox}>
           <h3>Why Anti-Doping Education is Important?</h3>
           <p>
-            Anti-doping education ensures fair play, protects athletes&apos;
-            health, and prevents accidental violations. Understanding these
-            rules helps maintain integrity in sports and prevents
-            career-threatening consequences.
+            Anti-doping education ensures fair competition by preventing the use
+            of banned substances. It safeguards athletes&apos; health by
+            promoting clean sport practices. Awareness of doping regulations
+            helps athletes avoid accidental rule violations, ensuring their
+            careers remain intact. Education also fosters a spirit of integrity
+            and ethics, reinforcing the true values of sportsmanship.
           </p>
         </div>
 
-        {/* Audio Below Matter */}
+        {/* Audio Box Fitting in Layout */}
         <div className={styles.audioBox}>
           <h2>Listen to This Audio</h2>
           <audio controls className={styles.audioPlayer}>
@@ -40,7 +48,7 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Middle Section - Poster Completely Covering */}
+      {/* Middle Section - Poster */}
       <div className={styles.middleSection}>
         <Image
           src="/Posters/homemain.png"

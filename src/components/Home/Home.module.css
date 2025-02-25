@@ -7,6 +7,32 @@
   background: url("/images/home_bg_new.png") no-repeat center center/cover;
   color: white;
   padding: 20px;
+  position: relative;
+}
+
+/* Main Heading */
+.mainHeading {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Subheading */
+.subHeading {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 /* Left Section */
@@ -17,11 +43,11 @@
   align-items: center;
   justify-content: start;
   padding: 10px;
-  gap: 15px;
+  gap: 12px;
   min-width: 300px;
 }
 
-/* Responsive Box Sizes */
+/* Optimized Box Sizes */
 .videoBox,
 .textBox,
 .audioBox,
@@ -30,15 +56,21 @@
   width: 90%;
   max-width: 400px;
   background: rgba(0, 0, 0, 0.7);
-  padding: 10px;
+  padding: 12px;
   border-radius: 10px;
   text-align: center;
 }
 
-.textBox,
-.rulesBox {
+/* Optimized Text Box to Fit Audio */
+.textBox {
+  width: 95%;
+  max-width: 430px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 12px;
+  border-radius: 10px;
   text-align: left;
   font-size: 14px;
+  line-height: 1.4;
 }
 
 /* Middle Section */
@@ -67,7 +99,7 @@
   align-items: center;
   justify-content: start;
   padding: 10px;
-  gap: 15px;
+  gap: 12px;
   min-width: 300px;
 }
 
@@ -78,6 +110,16 @@
   .container {
     flex-direction: column;
     height: auto;
+  }
+
+  .mainHeading {
+    font-size: 26px;
+    top: 5px;
+  }
+
+  .subHeading {
+    font-size: 20px;
+    top: 40px;
   }
 
   .leftSection,
@@ -106,6 +148,14 @@
     padding: 10px;
   }
 
+  .mainHeading {
+    font-size: 24px;
+  }
+
+  .subHeading {
+    font-size: 18px;
+  }
+
   .videoBox,
   .textBox,
   .audioBox,
@@ -113,7 +163,7 @@
   .smallVideoBox {
     width: 95%;
     max-width: 350px;
-    padding: 8px;
+    padding: 10px;
   }
 
   .poster {
@@ -128,6 +178,14 @@
 
 /* Small Mobile Screens */
 @media (max-width: 480px) {
+  .mainHeading {
+    font-size: 20px;
+  }
+
+  .subHeading {
+    font-size: 16px;
+  }
+
   .textBox,
   .rulesBox {
     font-size: 11px;
