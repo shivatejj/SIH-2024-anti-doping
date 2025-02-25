@@ -1,5 +1,5 @@
-import { FC, useState } from "react";
-import { signIn } from "next-auth/react";
+import { FC, useEffect, useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Form, Input, Button, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
@@ -8,6 +8,18 @@ import styles from "./Login.module.css";
 const Login: FC = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { data: session, status } = useSession();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      if (session?.user.role === 'user') {
+        router.push("/home");
+      } else {
+        router.push('/admin-dashboard');
+      }
+    }
+  }, [router, session, status]);
 
   const handleSubmit = async (values: { email: string; password: string }) => {
     setLoading(true);
@@ -18,15 +30,16 @@ const Login: FC = () => {
     });
     setLoading(false);
     if (result?.error) {
-      message.error(result.error);
-    } else {
-      message.success("Login successful!");
-      router.push("/home");
+      messageApi.open({
+        type: 'error',
+        content: result?.error,
+      });
     }
   };
 
   return (
     <div className={styles.loginContainer}>
+      {contextHolder}
       {/* Left Side: Login Form */}
       <div className={styles.leftPanel}>
         <div className={styles.loginCard}>
