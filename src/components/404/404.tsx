@@ -1,9 +1,7 @@
 import { Button, Result } from "antd";
-import { useRouter } from "next/router";
-import { FC } from "react";
 import { useAuth } from "../contexts/AuthContext";
-
-const Unauthorized: FC = () => {
+import { useRouter } from "next/router";
+const NotFound = () => {
 
   const router = useRouter();
   const { user } = useAuth();
@@ -18,12 +16,12 @@ const Unauthorized: FC = () => {
 
   return (
     <Result
-      status="403"
-      title="403"
-      subTitle="Sorry, you are not authorized to access this page."
+      status="404"
+      title="404"
+      subTitle="Sorry, the page you visited does not exist."
       extra={<Button type="primary" onClick={onClickHome}>Back Home</Button>}
     />
   )
 }
 
-export default Unauthorized;
+export default NotFound;

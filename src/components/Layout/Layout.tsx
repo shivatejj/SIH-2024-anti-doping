@@ -9,11 +9,19 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
   const { data: session } = useSession();
 
+  const logoClick = () => {
+    if (session?.user.role === 'user') {
+      router.push("/home");
+    } else {
+      router.push("/admin-dashboard");
+    }
+  }
+
   return (
     <Layout className={styles.layout}>
       {/* Header Section */}
       <Header className={styles.header}>
-        <div className={styles.logo} onClick={() => router.push("/")}>
+        <div className={styles.logo} onClick={logoClick}>
           Anti-Doping Education
         </div>
         <Menu
@@ -41,15 +49,9 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <Menu.Item key="4" onClick={() => router.push("/leaderboard")}>
             LeaderBoard
           </Menu.Item>
-          {session ? (
-            <Menu.Item key="5" onClick={() => signOut({ callbackUrl: "/" })}>
-              Logout
-            </Menu.Item>
-          ) : (
-            <Menu.Item key="6" onClick={() => router.push("/login")}>
-              Login
-            </Menu.Item>
-          )}
+          <Menu.Item key="5" onClick={() => signOut({ callbackUrl: "/login" })}>
+            Logout
+          </Menu.Item>
         </Menu>
       </Header>
 

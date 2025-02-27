@@ -16,4 +16,7 @@ const GamePage = () => (
   </AppLayout>
 );
 
-export default GamePage;
+export default dynamic(
+  () => import("../components/system/withAuth").then((mod) => mod.withAuth(GamePage, ["user"])),
+  { ssr: false }
+);
