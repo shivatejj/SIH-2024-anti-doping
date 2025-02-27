@@ -16,4 +16,7 @@ const HomePage = () => (
   </AppLayout>
 );
 
-export default HomePage;
+export default dynamic(
+  () => import("../components/system/withAuth").then((mod) => mod.withAuth(HomePage, ["user"])),
+  { ssr: false }
+);
