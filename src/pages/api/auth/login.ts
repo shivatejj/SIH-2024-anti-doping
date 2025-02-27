@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import cookie from "cookie";
+import { serialize } from "cookie";
 import User from "../../../models/User";
 import { connectDB } from "../../../lib/mongodb";
 
@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   res.setHeader(
     "Set-Cookie",
-    cookie.serialize("token", token, {
+    serialize("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 86400,
