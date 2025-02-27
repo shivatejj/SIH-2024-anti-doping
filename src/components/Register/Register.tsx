@@ -6,6 +6,7 @@ import styles from "./Register.module.css";
 const Register: FC = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const handleSubmit = async (values: {
     name: string;
@@ -22,15 +23,22 @@ const Register: FC = () => {
     setLoading(false);
 
     if (res.ok) {
-      message.success("Registration successful!");
+      messageApi.open({
+        type: 'success',
+        content: 'Registration successful!',
+      });
       router.push("/login");
     } else {
-      message.error("Error registering user");
+      messageApi.open({
+        type: 'error',
+        content: 'Error',
+      });
     }
   };
 
   return (
     <div className={styles.registerContainer}>
+      {contextHolder}
       <div className={styles.leftPanel}>
         <div className={styles.registerCard}>
           <h2 className={styles.registerTitle}>Register</h2>
