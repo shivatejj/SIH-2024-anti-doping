@@ -19,6 +19,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(403).json({ message: "Forbidden: Admins only" });
     }
 
+    if (questions.length < 5) {
+      return res.status(500).json({ message: "At least 5 questions are needed" });
+    }
+
     const newQuiz = new Quiz({ category, content, questions, level });
 
     await newQuiz.save();

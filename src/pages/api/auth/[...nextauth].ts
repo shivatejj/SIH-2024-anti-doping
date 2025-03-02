@@ -1,9 +1,12 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import Activity from "@/models/Activity";
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -31,20 +34,43 @@ export const authOptions: NextAuthOptions = {
         }
 
         await Activity.create({ name: user.name, email: user.email });
-        return { id: user._id, name: user.name, email: user.email, role: user.role };
+
+        const accessToken = jwt.sign(
+          {
+            userId: user.userId,
+            role: user.role,
+            name: user.name,
+            email: user.email,
+            level: user.level
+          },
+          JWT_SECRET,
+          { expiresIn: "1h" }
+        );
+
+        return {
+          id: user._id,
+          userId: user.userId,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          score: user.score,
+          attempts: user.attempts,
+          level: user.level,
+          accessToken
+        };
       },
     }),
   ],
   callbacks: {
     async session({ session, token }) {
-      session.user.id = token.id;
-      session.user.role = token.role;
+      if (session.user) {
+        session.user = token.user as Session['user'];
+      }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
+        token.user = user;
       }
       return token;
     },
