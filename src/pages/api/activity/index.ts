@@ -13,7 +13,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Get user session
     const user = isAuthenticated(req);
-    console.log(user);
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -45,9 +44,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (error) {
     if (typeof error === "object" && error !== null && "message" in error) {
       const err = error as { message: string; status?: number };
-      return res.status(err.status || 500).json({ error: err.message });
+      return res.status(err.status || 500).json({ message: err.message });
     }
 
-    return res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }
