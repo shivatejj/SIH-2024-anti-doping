@@ -17,6 +17,9 @@ const HomePage = () => (
 );
 
 export default dynamic(
-  () => import("../components/system/withAuth").then((mod) => mod.withAuth(HomePage, ["user"])),
+  () =>
+    import("../components/system/withAuth").then((mod) =>
+      mod.withAuth(HomePage, ["user"])
+    ),
   { ssr: false }
 );

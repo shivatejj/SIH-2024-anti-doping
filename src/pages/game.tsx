@@ -17,6 +17,9 @@ const GamePage = () => (
 );
 
 export default dynamic(
-  () => import("../components/system/withAuth").then((mod) => mod.withAuth(GamePage, ["user"])),
+  () =>
+    import("../components/system/withAuth").then((mod) =>
+      mod.withAuth(GamePage, ["user"])
+    ),
   { ssr: false }
 );
