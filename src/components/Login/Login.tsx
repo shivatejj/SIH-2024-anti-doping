@@ -12,11 +12,11 @@ const Login: FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      if (session?.user.role === 'user') {
+    if (status === "authenticated") {
+      if (session?.user?.role === "user") {
         router.push("/home");
       } else {
-        router.push('/admin-dashboard');
+        router.push("/admin-dashboard");
       }
     }
   }, [router, session, status]);
@@ -31,7 +31,7 @@ const Login: FC = () => {
     setLoading(false);
     if (result?.error) {
       messageApi.open({
-        type: 'error',
+        type: "error",
         content: result?.error,
       });
     }

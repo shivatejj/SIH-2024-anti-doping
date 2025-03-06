@@ -1,93 +1,90 @@
 import { FC, useEffect, useState } from "react";
-import { Button, Table, message } from "antd";
-import { signOut } from "next-auth/react";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { useAuth } from "../contexts/AuthContext";
+import { Button, Table } from "antd";
+import styles from "./AdminDashboard.module.css"; // ✅ Connected CSS
+import { signOut, useSession } from "next-auth/react";
+import moment from "moment";
 
 const AdminDashboard: FC = () => {
-  const [activityData, setActivityData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<{ name?: string; role?: string } | null>(
-    null
-  );
+  const { user } = useAuth();
+  const { data: session } = useSession();
+  const [activities, setActivities] = useState([]);
 
-  useEffect(() => {
-    fetchUserData();
-    fetchActivityData();
-  }, []);
-
-  const fetchUserData = () => {
-    const token = Cookies.get("auth-token"); // Ensure your token name is correct
-    if (!token) {
-      message.error("Not authenticated");
-      return;
-    }
-
+  const getActivity = async () => {
     try {
-      const userData = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
-      setUser(userData);
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      message.error("Invalid token");
-    }
-  };
-
-  const fetchActivityData = async () => {
-    setLoading(true);
-    const token = Cookies.get("auth-token");
-    if (!token) {
-      message.error("Authentication token missing");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const response = await axios.get("/api/activity", {
+      const response = await fetch("/api/activity", {
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`, // Pass token in headers
+          Authorization: `Bearer ${session?.user?.accessToken}`,
+          "Content-Type": "application/json",
         },
+        credentials: "include",
       });
 
-      console.log("API Response:", response.data);
-      setActivityData(response.data.data || []);
+      if (!response.ok) throw new Error("Failed to fetch activities");
+      const result = await response.json();
+      setActivities(result.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
-      message.error("Failed to load activity data");
+      console.error("Error fetching activity:", error);
     }
-    setLoading(false);
   };
 
-  const columns = [
-    { title: "User Name", dataIndex: "name", key: "name" },
-    { title: "Email", dataIndex: "email", key: "email" },
-    {
-      title: "Login Time",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (text: string) =>
-        text ? new Date(text).toLocaleString() : "N/A",
-    },
-  ];
+  useEffect(() => {
+    if (session) {
+      getActivity();
+    }
+
+    const interval = setInterval(getActivity, 5000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
 
   return (
-    <div style={{ textAlign: "center", marginTop: 50 }}>
-      <h1>Welcome, {user?.name || "Admin"}</h1>
-      <p>Role: {user?.role || "Unknown"}</p>
-      <Button
-        type="primary"
-        onClick={() => signOut()}
-        style={{ marginBottom: 20 }}
-      >
-        Logout
-      </Button>
+    <div className={styles.container}>
+      <h1 className={styles.title}>👑 Welcome, {user?.name}! 🚀</h1>
+      <p className={styles.role}>
+        Role: <span>{user?.role}</span>
+      </p>
 
-      <Table
-        dataSource={activityData}
-        columns={columns}
-        loading={loading}
-        rowKey="_id"
-        pagination={{ pageSize: 5 }}
-      />
+      <div className={styles.tableContainer}>
+        <Table
+          className={styles.table}
+          dataSource={activities}
+          bordered
+          columns={[
+            {
+              title: "👤 Name",
+              dataIndex: "name",
+              key: "name",
+              render: (text) => <span className={styles.name}>{text}</span>,
+            },
+            {
+              title: "📧 Email",
+              dataIndex: "email",
+              key: "email",
+              render: (text) => <span className={styles.email}>{text}</span>,
+            },
+            {
+              title: "⏰ Login Time",
+              dataIndex: "loginTime",
+              key: "loginTime",
+              render: (text: string) =>
+                text ? (
+                  <span className={styles.loginTime}>
+                    {moment(text).format("DD/MM/YYYY hh:mm:ss A")}
+                  </span>
+                ) : (
+                  <span className={styles.noData}>No Data</span>
+                ),
+            },
+          ]}
+          rowKey="_id"
+        />
+      </div>
+
+      <Button className={styles.button} onClick={() => signOut()}>
+        🚪 Logout
+      </Button>
     </div>
   );
 };

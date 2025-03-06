@@ -9,44 +9,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   await connectDB();
-  try {
 
-    // Get user session
+  try {
     const user = isAuthenticated(req);
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // Check if user is admin
-    if (user.role !== "admin") {
-      return res.status(403).json({ message: "Forbidden: Admins only" });
-    }
+    // ✅ Fetch all users with proper date conversion
+    const logs = await Activity.find()
+      .sort({ loginTime: -1 })
+      .lean()
+      .select("name email loginTime");
 
-    // Pagination (default page = 1, limit = 10)
-    const { page = "1", limit = "10" } = req.query;
-    const pageNumber = parseInt(page as string, 10);
-    const pageSize = parseInt(limit as string, 10);
-    const skip = (pageNumber - 1) * pageSize;
+    // ✅ Convert loginTime to proper Date object before sending response
+    const formattedLogs = logs.map(log => ({
+      ...log,
+      loginTime: log.loginTime ? new Date(log.loginTime).toISOString() : null,
+    }));
 
-    // Fetch logs
-    const logs = await Activity.find().sort({ createdAt: -1 }).skip(skip).limit(pageSize);
-    const totalLogs = await Activity.countDocuments();
-
-    return res.status(200).json({
-      success: true,
-      data: logs,
-      pagination: {
-        total: totalLogs,
-        page: pageNumber,
-        pages: Math.ceil(totalLogs / pageSize),
-      },
-    });
+    return res.status(200).json({ success: true, data: formattedLogs });
   } catch (error) {
-    if (typeof error === "object" && error !== null && "message" in error) {
-      const err = error as { message: string; status?: number };
-      return res.status(err.status || 500).json({ message: err.message });
-    }
-
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error fetching user logs:", error);
+    return res.status(500).json({ message: "Internal Server Error", error: (error as Error).message });
   }
 }

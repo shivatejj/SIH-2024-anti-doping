@@ -1,0 +1,111 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+  padding: 40px;
+  background: linear-gradient(to right, #1e3c72, #2a5298);
+}
+
+/* Form Section */
+.formBox {
+  width: 45%;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out;
+}
+
+.formBox:hover {
+  transform: scale(1.02);
+}
+
+.heading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #1e3c72;
+}
+
+.input,
+.select {
+  width: 95%;
+  padding: 12px;
+  margin: 15px 0;
+  border: 2px solid #1e3c72;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.input:focus,
+.select:focus {
+  border-color: #2a5298;
+  outline: none;
+}
+
+/* Image Section */
+.imageBox {
+  width: 45%;
+  height: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.sportImage {
+  width: 100%;
+  height: 100%;
+  max-width: 500px;
+  max-height: 450px;
+  border-radius: 15px;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sportImage:hover {
+  transform: scale(1.05);
+}
+
+.selectSportText {
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Access Button */
+.accessButton {
+  width: 95%;
+  background: #ff6600;
+  color: white;
+  border: none;
+  padding: 15px 0;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-top: 20px;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+.accessButton:hover {
+  background: #e65c00;
+  transform: scale(1.05);
+}
+
+/* Error Message */
+.error {
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+}
