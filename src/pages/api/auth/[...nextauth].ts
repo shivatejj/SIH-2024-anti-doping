@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error("❌ Invalid credentials");
         }
 
-        await Activity.create({ name: user.name, email: user.email });
+        await Activity.create({ name: user.name, email: user.email, loginTime: new Date() });
 
         const accessToken = jwt.sign(
           {
