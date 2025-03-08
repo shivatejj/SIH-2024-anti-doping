@@ -38,8 +38,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const shuffledQuestions = quiz.questions
       .sort(() => 0.5 - Math.random())
       .slice(0, 5)
-      .map((data: { question: string, options: string[] }) =>
-        ({ question: data.question, options: data.options }));
+      .map((data: { question: string, options: string[], _id: string }) =>
+        ({ id: data._id, question: data.question, options: data.options }));
 
     if (user.role === 'user') {
       await User.findOneAndUpdate(
@@ -48,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       );
     }
 
-    return res.status(200).json({ content: quiz.content, questions: shuffledQuestions });
+    return res.status(200).json({ id: quiz._id, content: quiz.content, questions: shuffledQuestions });
 
   } catch (error) {
     if (typeof error === "object" && error !== null && "message" in error) {
