@@ -23,6 +23,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ message: "At least 5 questions are needed" });
     }
 
+    const quiz = await Quiz.findOne({ category: category, level: level });
+
+    if (quiz) {
+      return res.status(409).json({ message: "Quiz with same combination already exists" });
+    }
+
     const newQuiz = new Quiz({ category, content, questions, level });
 
     await newQuiz.save();
