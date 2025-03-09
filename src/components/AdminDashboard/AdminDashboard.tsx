@@ -4,7 +4,6 @@ import { Spin, Table } from "antd";
 import styles from "./AdminDashboard.module.css";
 import { useSession } from "next-auth/react";
 import moment from "moment";
-import { useMessage } from "../Message/Message";
 
 const AdminDashboard: FC = () => {
   const { user } = useAuth();
@@ -21,7 +20,6 @@ const AdminDashboard: FC = () => {
   const [loading, setLoading] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const messageApi = useMessage();
 
   useEffect(() => {
     setLoading(true);
@@ -37,13 +35,9 @@ const AdminDashboard: FC = () => {
       .then(json => setActivities(json))
       .catch(error => {
         console.error("Error fetching activity:", error);
-        messageApi.open({
-          type: "error",
-          content: "Something went wrong fetching activity"
-        })
       })
       .finally(() => setLoading(false));
-  }, [session?.user?.accessToken, pageIndex, pageSize, messageApi]);
+  }, [session?.user?.accessToken, pageIndex, pageSize]);
 
   const onChangePageIndex = (pageIndex: number) => {
     setPageIndex(pageIndex);
