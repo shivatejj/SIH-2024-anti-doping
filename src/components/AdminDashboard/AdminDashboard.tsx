@@ -14,8 +14,8 @@ const AdminDashboard: FC = () => {
     pagination: {
       pageIndex: 1,
       pageSize: 10,
-      total: 0
-    }
+      total: 0,
+    },
   });
   const [loading, setLoading] = useState(false);
   const [pageIndex, setPageIndex] = useState(1);
@@ -31,9 +31,9 @@ const AdminDashboard: FC = () => {
       },
       credentials: "include",
     })
-      .then(response => response.json())
-      .then(json => setActivities(json))
-      .catch(error => {
+      .then((response) => response.json())
+      .then((json) => setActivities(json))
+      .catch((error) => {
         console.error("Error fetching activity:", error);
       })
       .finally(() => setLoading(false));
@@ -41,7 +41,7 @@ const AdminDashboard: FC = () => {
 
   const onChangePageIndex = (pageIndex: number) => {
     setPageIndex(pageIndex);
-  }
+  };
 
   const onPageSizeChange = (currentPage: number, pageSize: number) => {
     setPageSize(pageSize);
@@ -72,10 +72,9 @@ const AdminDashboard: FC = () => {
               title: "⏰ Login Time",
               dataIndex: "loginTime",
               key: "loginTime",
-              render: (loginTime: string) =>
-                <span>
-                  {moment(loginTime).format("DD/MM/YYYY hh:mm:ss A")}
-                </span>
+              render: (loginTime: string) => (
+                <span>{moment(loginTime).format("DD/MM/YYYY hh:mm:ss A")}</span>
+              ),
             },
           ]}
           pagination={{
@@ -87,7 +86,7 @@ const AdminDashboard: FC = () => {
             pageSizeOptions: [10, 20, 50, 100],
             total: activities?.pagination?.total,
             onChange: onChangePageIndex,
-            onShowSizeChange: onPageSizeChange
+            onShowSizeChange: onPageSizeChange,
           }}
         />
       </div>

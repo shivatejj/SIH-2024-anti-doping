@@ -1,14 +1,12 @@
-"use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Learning.module.css";
 
 const sportImages: { [key: string]: string } = {
-  Wrestling: "/images/wrestling.jpg",
-  Cycling: "/images/cycling.jpg",
-  Badminton: "/images/badminton.jpg",
-  Swimming: "/images/swimming.jpg",
+  wrestling: "/images/wrestling.jpg",
+  cycling: "/images/cycling.jpg",
+  badminton: "/images/badminton.jpg",
+  swimming: "/images/swimming.jpg",
 };
 
 const Learning = () => {
@@ -19,8 +17,7 @@ const Learning = () => {
   const router = useRouter();
 
   const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // eslint-disable-next-line prefer-const
-    let value = e.target.value;
+    const value = e.target.value;
     if (!/^\d*$/.test(value)) return;
     const numericAge = Number(value);
 
@@ -55,7 +52,9 @@ const Learning = () => {
     }
 
     setError("");
-    router.push("/learning-content");
+    router.push(
+      `/learning-content?name=${name}&age=${age}&sport=${selectedSport}`
+    );
   };
 
   return (
@@ -88,10 +87,10 @@ const Learning = () => {
           className={styles.select}
         >
           <option value="">Select Sport</option>
-          <option value="Wrestling">Wrestling</option>
-          <option value="Cycling">Cycling</option>
-          <option value="Badminton">Badminton</option>
-          <option value="Swimming">Swimming</option>
+          <option value="wrestling">Wrestling</option>
+          <option value="cycling">Cycling</option>
+          <option value="badminton">Badminton</option>
+          <option value="swimming">Swimming</option>
         </select>
 
         <button className={styles.accessButton} onClick={handleAccessContent}>

@@ -19,4 +19,10 @@ const LearningContentPage: React.FC = () => (
   </AppLayout>
 );
 
-export default LearningContentPage;
+export default dynamic(
+  () =>
+    import("../components/system/withAuth").then((mod) =>
+      mod.withAuth(LearningContentPage, ["user"])
+    ),
+  { ssr: false }
+);
