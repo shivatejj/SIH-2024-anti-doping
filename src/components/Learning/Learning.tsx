@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Learning.module.css";
 
-const sportImages: { [key: string]: string } = {
+const sportImages = {
   wrestling: "/images/wrestling.jpg",
   cycling: "/images/cycling.jpg",
   badminton: "/images/badminton.jpg",
@@ -12,27 +12,16 @@ const sportImages: { [key: string]: string } = {
 const Learning = () => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
-  const [selectedSport, setSelectedSport] = useState("");
+  const [selectedSport, setSelectedSport] = useState<
+    "" | keyof typeof sportImages
+  >("");
   const [error, setError] = useState("");
   const router = useRouter();
 
   const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (!/^\d*$/.test(value)) return;
-    const numericAge = Number(value);
-
-    if (value === "") {
-      setAge("");
-      setError("");
-      return;
-    }
-
-    if (numericAge >= 15 && numericAge <= 70) {
-      setAge(value);
-      setError("");
-    } else {
-      setError("Age must be between 15 and 70.");
-    }
+    setAge(value);
   };
 
   const handleAccessContent = () => {
@@ -41,7 +30,8 @@ const Learning = () => {
       return;
     }
 
-    if (!age || Number(age) < 15 || Number(age) > 70) {
+    const numericAge = Number(age);
+    if (!age || numericAge < 15 || numericAge > 70) {
       setError("Enter a valid age between 15 and 70.");
       return;
     }
@@ -72,18 +62,19 @@ const Learning = () => {
         />
 
         <input
-          type="number"
+          type="text"
           placeholder="Enter Age (15-70)"
           value={age}
           onChange={handleAgeChange}
-          className={styles.input}
-          min="15"
-          max="70"
+          className={`${styles.input} ${styles.ageInput}`}
+          inputMode="numeric"
         />
 
         <select
           value={selectedSport}
-          onChange={(e) => setSelectedSport(e.target.value)}
+          onChange={(e) =>
+            setSelectedSport(e.target.value as keyof typeof sportImages)
+          }
           className={styles.select}
         >
           <option value="">Select Sport</option>
@@ -102,7 +93,7 @@ const Learning = () => {
         {selectedSport ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={sportImages[selectedSport]}
+            src={sportImages[selectedSport as keyof typeof sportImages]}
             alt={selectedSport}
             className={styles.sportImage}
           />
