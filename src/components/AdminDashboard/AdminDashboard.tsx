@@ -1,90 +1,102 @@
 import { FC, useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { Button, Table } from "antd";
-import styles from "./AdminDashboard.module.css"; // ✅ Connected CSS
-import { signOut, useSession } from "next-auth/react";
+import { Spin, Table } from "antd";
+import styles from "./AdminDashboard.module.css";
+import { useSession } from "next-auth/react";
 import moment from "moment";
+import { useMessage } from "../Message/Message";
 
 const AdminDashboard: FC = () => {
   const { user } = useAuth();
   const { data: session } = useSession();
-  const [activities, setActivities] = useState([]);
-
-  const getActivity = async () => {
-    try {
-      const response = await fetch("/api/activity", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${session?.user?.accessToken}`,
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-
-      if (!response.ok) throw new Error("Failed to fetch activities");
-      const result = await response.json();
-      setActivities(result.data);
-    } catch (error) {
-      console.error("Error fetching activity:", error);
+  const [activities, setActivities] = useState({
+    success: false,
+    data: [],
+    pagination: {
+      pageIndex: 1,
+      pageSize: 10,
+      total: 0
     }
-  };
+  });
+  const [loading, setLoading] = useState(false);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const messageApi = useMessage();
 
   useEffect(() => {
-    if (session) {
-      getActivity();
-    }
+    setLoading(true);
+    fetch(`/api/activity?page=${pageIndex}&limit=${pageSize}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${session?.user?.accessToken}`,
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then(response => response.json())
+      .then(json => setActivities(json))
+      .catch(error => {
+        console.error("Error fetching activity:", error);
+        messageApi.open({
+          type: "error",
+          content: "Something went wrong fetching activity"
+        })
+      })
+      .finally(() => setLoading(false));
+  }, [session?.user?.accessToken, pageIndex, pageSize, messageApi]);
 
-    const interval = setInterval(getActivity, 5000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
+  const onChangePageIndex = (pageIndex: number) => {
+    setPageIndex(pageIndex);
+  }
+
+  const onPageSizeChange = (currentPage: number, pageSize: number) => {
+    setPageSize(pageSize);
+  };
 
   return (
     <div className={styles.container}>
+      <Spin spinning={loading} fullscreen />
       <h1 className={styles.title}>👑 Welcome, {user?.name}! 🚀</h1>
-      <p className={styles.role}>
-        Role: <span>{user?.role}</span>
-      </p>
-
       <div className={styles.tableContainer}>
         <Table
+          rowKey="_id"
           className={styles.table}
-          dataSource={activities}
+          dataSource={activities?.data}
           bordered
           columns={[
             {
               title: "👤 Name",
               dataIndex: "name",
               key: "name",
-              render: (text) => <span className={styles.name}>{text}</span>,
             },
             {
               title: "📧 Email",
               dataIndex: "email",
               key: "email",
-              render: (text) => <span className={styles.email}>{text}</span>,
             },
             {
               title: "⏰ Login Time",
               dataIndex: "loginTime",
               key: "loginTime",
-              render: (text: string) =>
-                text ? (
-                  <span className={styles.loginTime}>
-                    {moment(text).format("DD/MM/YYYY hh:mm:ss A")}
-                  </span>
-                ) : (
-                  <span className={styles.noData}>No Data</span>
-                ),
+              render: (loginTime: string) =>
+                <span>
+                  {moment(loginTime).format("DD/MM/YYYY hh:mm:ss A")}
+                </span>
             },
           ]}
-          rowKey="_id"
+          pagination={{
+            showSizeChanger: true,
+            defaultCurrent: 1,
+            defaultPageSize: 10,
+            pageSize: pageSize,
+            current: pageIndex,
+            pageSizeOptions: [10, 20, 50, 100],
+            total: activities?.pagination?.total,
+            onChange: onChangePageIndex,
+            onShowSizeChange: onPageSizeChange
+          }}
         />
       </div>
-
-      <Button className={styles.button} onClick={() => signOut()}>
-        🚪 Logout
-      </Button>
     </div>
   );
 };
