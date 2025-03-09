@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
 import User from "../../../models/User";
 import { connectDB } from "../../../lib/mongodb";
+import Activity from "@/models/Activity";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -43,6 +44,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       path: "/",
     })
   );
+
+  await Activity.create({ name: user.name, email: user.email, loginTime: new Date() });
 
   res.status(200).json({
     message: "Login successful",
