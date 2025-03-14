@@ -1,159 +1,209 @@
-/* Container for the page */
 .container {
   display: flex;
-  justify-content: space-between;
-  height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-  background: linear-gradient(to right, #141e30, #243b55);
-  color: white;
+  min-height: 90vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  margin: 20px;
 }
 
-/* Left Panel */
 .leftPanel {
-  width: 25%;
-  padding: 20px;
+  flex: 1;
+  padding: 30px;
+  background: linear-gradient(180deg, #2c3e50 0%, #1a2a38 100%);
+  color: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 20px;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-  color: white;
-  height: 100%;
+  gap: 24px;
+  max-width: 300px;
 }
 
-/* Right Panel */
-.rightPanel {
-  width: 70%;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 20px;
-  background: linear-gradient(
-    to bottom right,
-    #6a1b9a,
-    #d32f2f
-  ); /* Gradient that suits the background */
-  border-radius: 10px;
-  color: white;
-  overflow-y: auto;
-}
-
-/* Heading */
-.heading {
+.leftPanel h1 {
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 700;
   margin-bottom: 20px;
-  color: white;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 16px;
 }
 
-/* Level Buttons */
 .levels {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .levelButton {
-  width: 100%;
-  padding: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  text-align: center;
-  background: linear-gradient(to right, #ff7eb3, #ff758c);
-  color: white;
+  position: relative;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.levelButton:hover {
-  background: linear-gradient(to right, #ff512f, #dd2476);
-  transform: translateY(-3px);
+.levelButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
 }
 
 .levelButton:disabled {
-  background: rgba(255, 255, 255, 0.2);
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .activeLevel {
-  background: linear-gradient(to right, #00c6ff, #0072ff);
+  background: #3498db;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+.activeLevel:hover {
+  background: #2980b9;
 }
 
 .lockIcon {
-  margin-right: 10px;
-  color: #ffeb3b;
-  font-size: 20px;
+  font-size: 16px;
+  margin-right: 4px;
 }
 
-/* Submit Button - Always at the Bottom */
+.submitContainer {
+  margin-top: auto;
+}
+
 .submitButton {
   width: 100%;
-  padding: 12px;
-  font-size: 18px;
-  font-weight: bold;
-  text-align: center;
-  background: linear-gradient(to right, #00ff87, #009dff);
+  padding: 16px;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
   border: none;
   border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
-  transition: 0.3s ease;
-  margin-top: auto; /* Push it to the bottom */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
 }
 
 .submitButton:hover {
-  background: linear-gradient(to right, #009dff, #0048ff);
+  background: linear-gradient(135deg, #2980b9 0%, #1c5a85 100%);
+  transform: translateY(-2px);
 }
 
-/* Content Section (Right Panel) */
+.rightPanel {
+  flex: 3;
+  padding: 30px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin 1.5s linear infinite;
+  color: #3498db;
+  font-size: 24px;
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
 .contentContainer {
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .content {
-  font-size: 18px;
-  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #34495e;
 }
 
-/* Quiz Section */
 .quizContainer {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.questionContainer {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.questionContainer:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .question {
   font-size: 18px;
-  font-weight: bold;
-  color: #fff;
-  margin-bottom: 10px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #2c3e50;
 }
 
-/* Options */
 .option {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin: 5px 0;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
 }
 
 .option:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background-color: #f5f7fa;
 }
 
-.selectedOption {
-  background: #ffeb3b;
-  color: black;
-  font-weight: bold;
+.option input[type="radio"] {
+  margin-right: 12px;
+  accent-color: #3498db;
+  width: 18px;
+  height: 18px;
+}
+
+.option label {
+  font-size: 16px;
+  color: #34495e;
+  cursor: pointer;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .leftPanel {
+    max-width: none;
+    padding: 20px;
+  }
+
+  .rightPanel {
+    padding: 20px;
+  }
 }

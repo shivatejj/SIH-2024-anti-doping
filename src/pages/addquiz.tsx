@@ -1,25 +1,25 @@
 import dynamic from "next/dynamic";
 
-const AppLayout = dynamic(() => import("../components/Layout/Layout"), {
+const AppLayout = dynamic(() => import("@/components/Layout/Layout"), {
   ssr: false,
   loading: () => <p>Loading...</p>,
 });
 
-const Learning = dynamic(() => import("../components/Learning/Learning"), {
+const AddQuiz = dynamic(() => import("@/components/AddQuiz/AddQuiz"), {
   ssr: false,
   loading: () => <p>Loading...</p>,
 });
 
-const LearningPage: React.FC = () => (
+const AddQuizPage = () => (
   <AppLayout>
-    <Learning />
+    <AddQuiz />
   </AppLayout>
 );
 
 export default dynamic(
   () =>
     import("../components/system/withAuth").then((mod) =>
-      mod.withAuth(LearningPage, ["user"])
+      mod.withAuth(AddQuizPage, ["admin"])
     ),
   { ssr: false }
 );

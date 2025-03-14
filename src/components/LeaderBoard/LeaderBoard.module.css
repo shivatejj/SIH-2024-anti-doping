@@ -1,0 +1,115 @@
+/* Main Container */
+.leaderboardContainer {
+  width: 80%;
+  margin: 40px auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Ant Design Tabs */
+.ant-tabs-tab {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 20px !important;
+  color: white !important;
+  transition: 0.3s;
+}
+
+.ant-tabs-tab:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+/* Custom Tab Styling */
+.customTab {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 20px !important;
+  color: white !important;
+  transition: 0.3s;
+}
+
+.customTab:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+/* Table Container */
+.tableContainer {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Rank Styling */
+.rankStyle {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Golden Crown Icon */
+.goldRank {
+  color: gold;
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+/* Pagination */
+.customPagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.customPagination .ant-pagination-item {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.customPagination .ant-pagination-item:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.customPagination .ant-pagination-item-active {
+  background: gold !important;
+  color: black !important;
+  border-radius: 8px;
+}
+
+/* Pagination - Right Aligned */
+.pagination {
+  display: flex;
+  justify-content: flex-end; /* Align to right */
+  margin-top: 15px;
+}
+
+.pagination .ant-pagination-item {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  color: white;
+  transition: 0.3s;
+}
+
+.pagination .ant-pagination-item-active {
+  background: #ffeb3b;
+  color: black;
+  font-weight: bold;
+}
+
+.pagination .ant-pagination-item:hover {
+  background: #ff9800;
+  color: black;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .leaderboardContainer {
+    width: 90%;
+  }
+}
