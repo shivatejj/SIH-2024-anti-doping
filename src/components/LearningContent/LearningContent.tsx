@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FiLock } from "react-icons/fi";
 import { Radio } from "antd";
+import { QuizLevelEnum } from "@/models/Quiz";
 
 const style: React.CSSProperties = {
   display: 'flex',
@@ -17,6 +18,7 @@ const levels = ["easy", "medium", "hard"];
 interface IQuestionResponse {
   id: string;
   content: string;
+  level: QuizLevelEnum | undefined;
   questions: {
     id: string;
     question: string;
@@ -39,6 +41,7 @@ const LearningContent = () => {
   const [questionResponse, setQuestionResponse] = useState<IQuestionResponse>({
     id: '',
     content: '',
+    level: undefined,
     questions: []
   });
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -125,10 +128,9 @@ const LearningContent = () => {
           {levels.map((level) => (
             <button
               key={level}
-              className={`${styles.levelButton} ${session?.user?.level === level ? styles.activeLevel : ""
-                }`}
+              className={`${styles.levelButton} ${questionResponse?.level === level ? styles.activeLevel : ""}`}
             >
-              {level === "medium" || level === "hard" ? (
+              {questionResponse?.level !== level ? (
                 <div className={styles.lockIcon}>
                   <FiLock />
                 </div>
@@ -165,7 +167,7 @@ const LearningContent = () => {
                         <Radio.Group
                           key={question.id}
                           style={style}
-                          // className={styles.option}
+                          className={styles.option}
                           onChange={(event) => {
                             setEvaluatePayload({
                               quizId: questionResponse.id,
