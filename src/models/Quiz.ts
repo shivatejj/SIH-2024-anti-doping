@@ -8,6 +8,13 @@ export interface IQuestions {
 
 export type QuizLevel = "easy" | "medium" | "hard";
 
+export enum QuizLevelEnum {
+  EASY = "easy",
+  MEDIUM = "medium",
+  HARD = "hard",
+  COMPLETED = "completed"
+}
+
 export interface IQuiz extends Document {
   category: string;
   content: string;
