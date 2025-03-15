@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  background: url("/images/learning_bg.jpg") no-repeat center center/cover;
   padding: 20px;
 }
 
@@ -11,7 +11,7 @@
   width: 100%;
   max-width: 450px;
   padding: 40px;
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.5s ease-in-out;
@@ -58,8 +58,8 @@
   border: 1px solid #ffa39e;
 }
 
-/* Override ant design default styles */
-.input {
+.input,
+.select {
   margin-bottom: 16px;
 }
 
@@ -67,27 +67,40 @@
 .input :global(.ant-input-number),
 .select :global(.ant-select-selector) {
   border-radius: 6px;
-  padding: 8px 12px;
+  padding: 10px;
   height: auto;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
 }
 
 .input :global(.ant-input:focus),
 .input :global(.ant-input-number:focus),
 .select :global(.ant-select-selector:focus) {
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  border-color: #1890ff;
+  box-shadow: none;
+}
+
+.input :global(.ant-input-number) input {
+  appearance: textfield;
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  -ms-appearance: textfield;
+}
+
+.input :global(.ant-input-number) input::-webkit-inner-spin-button,
+.input :global(.ant-input-number) input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
 }
 
 .select {
-  margin-bottom: 16px;
   width: 100%;
-}
-
-.select :global(.ant-select-selector) {
-  height: 40px !important;
-}
-
-.select :global(.ant-select-selection-item) {
-  line-height: 24px !important;
 }
 
 .accessButton {

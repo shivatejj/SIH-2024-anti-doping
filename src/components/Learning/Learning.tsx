@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Input, Select, Button, InputNumber, Form, Alert } from "antd";
+import { Input, Select, Button, Form, Alert } from "antd";
 import styles from "./Learning.module.css";
 
 const Learning = () => {
   const [name, setName] = useState("");
-  const [age, setAge] = useState<number | null>(null);
+  const [age, setAge] = useState("");
   const [selectedSport, setSelectedSport] = useState("");
   const [sports, setSports] = useState<string[]>([]);
   const [error, setError] = useState("");
@@ -31,7 +31,7 @@ const Learning = () => {
       setError("Name is required.");
       return;
     }
-    if (!age || age < 15 || age > 70) {
+    if (!age || isNaN(Number(age)) || Number(age) < 15 || Number(age) > 70) {
       setError("Enter a valid age between 15 and 70.");
       return;
     }
@@ -49,6 +49,7 @@ const Learning = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.overlay}></div>
       <div className={styles.formBox}>
         <h2 className={styles.heading}>Enter Your Details</h2>
         {error && (
@@ -62,31 +63,34 @@ const Learning = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               size="large"
+              className={styles.inputField}
             />
           </Form.Item>
 
           <Form.Item className={styles.input}>
-            <InputNumber
+            <Input
               placeholder="Enter Age (15-70)"
               value={age}
-              onChange={(value) => setAge(value)}
-              min={15}
-              max={70}
+              onChange={(e) => setAge(e.target.value)}
               size="large"
-              style={{ width: "100%" }}
+              className={styles.inputField}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
             />
           </Form.Item>
 
-          <Form.Item className={styles.select}>
+          <Form.Item className={styles.input}>
             <Select
               placeholder="Select Sport"
               value={selectedSport || undefined}
               onChange={(value) => setSelectedSport(value)}
               size="large"
+              className={styles.inputField}
             >
               {sports.map((sport) => (
                 <Select.Option key={sport} value={sport}>
-                  {sport}
+                  {sport?.[0].toUpperCase() + sport.slice(1, sport.length)}
                 </Select.Option>
               ))}
             </Select>

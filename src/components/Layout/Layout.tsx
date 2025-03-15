@@ -10,6 +10,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
   const { data: session } = useSession();
 
+  // All available menu items
   const menuItems = [
     { key: "/home", label: "Home" },
     { key: "/game", label: "Fun-Game" },
@@ -18,9 +19,18 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { key: "/addquiz", label: "Add Quiz" },
   ];
 
+  const userRole = session?.user?.role || "user";
+
+  const filteredMenuItems =
+    userRole === "admin"
+      ? menuItems.filter((item) =>
+          ["/home", "/leaderboard", "/addquiz"].includes(item.key)
+        )
+      : menuItems.filter((item) => item.key !== "/addquiz"); // Non-admin users cannot see Add Quiz
+
   const currentTab =
-    menuItems.find((item) => router.pathname.startsWith(item.key))?.key ||
-    "/home";
+    filteredMenuItems.find((item) => router.pathname.startsWith(item.key))
+      ?.key || "/home";
 
   const profileMenu = (
     <Menu>
@@ -31,7 +41,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         key="logout"
         onClick={() => signOut({ callbackUrl: "/login" })}
       >
-        Logout
+        🔒 Logout
       </Menu.Item>
     </Menu>
   );
@@ -56,7 +66,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             whiteSpace: "nowrap",
           }}
         >
-          {menuItems.map((item) => (
+          {filteredMenuItems.map((item) => (
             <Menu.Item key={item.key} onClick={() => router.push(item.key)}>
               {item.label}
             </Menu.Item>

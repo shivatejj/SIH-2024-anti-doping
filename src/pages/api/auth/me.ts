@@ -22,7 +22,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       name: decoded.name,
       email: decoded.email,
       role: decoded.role,
-      level: decoded.level,
     });
   } catch (error) {
     console.error("Auth error:", error);
