@@ -57,10 +57,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     );
 
     return res.status(200).json({
-      message: "Quiz evaluated successfully",
+      message:
+        score >= 3 ?
+          "Congratulations! You have passed the exam and are ready for the next challenge." :
+          "Unfortunately, you did not pass this time. Keep practicing and try again!",
       score,
       attempts: updatedStats?.attempts,
       level: updatedStats?.level,
+      isCleared: score >= 3
     });
 
   } catch (error) {

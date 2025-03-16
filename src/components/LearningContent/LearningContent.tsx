@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./LearningContent.module.css";
-import { Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FiLock } from "react-icons/fi";
-import { Radio, Modal, Button } from "antd";
-import { QuizLevelEnum } from "@/models/Quiz";
+import { Radio, Modal, Button, Spin, Typography, Row, Col, Skeleton, Result } from "antd";
+import { CheckCircleFilled, CloseCircleOutlined, EditOutlined, FrownOutlined, LockFilled, SmileOutlined } from "@ant-design/icons";
+import { QuizLevelEnum } from "@/utils/Constants";
+
+const { Text } = Typography
 
 const style: React.CSSProperties = {
   display: "flex",
@@ -13,7 +14,13 @@ const style: React.CSSProperties = {
   gap: 8,
 };
 
-const levels = ["easy", "medium", "hard"];
+const levels = [
+  QuizLevelEnum.EASY,
+  QuizLevelEnum.MEDIUM,
+  QuizLevelEnum.HARD,
+  QuizLevelEnum.COMPLETED,
+  undefined,
+];
 
 interface IQuestionResponse {
   id: string;
@@ -26,6 +33,11 @@ interface IQuestionResponse {
   }[];
 }
 
+interface IQuestionErrorResponse {
+  message: string;
+  level?: QuizLevelEnum.COMPLETED;
+}
+
 interface IEvaluatePayload {
   quizId: string;
   category: string;
@@ -35,62 +47,68 @@ interface IEvaluatePayload {
   }[];
 }
 
+interface IEvaluateResponse {
+  message: string;
+  score: number;
+  attempts: number;
+  level: QuizLevelEnum;
+  isCleared: boolean;
+}
+
 const LearningContent = () => {
   const router = useRouter();
+  const [modal, contextHolder] = Modal.useModal();
   const { data: session } = useSession();
-  const [questionResponse, setQuestionResponse] = useState<IQuestionResponse>({
-    id: "",
-    content: "",
-    level: undefined,
-    questions: [],
-  });
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [questionSuccessResponse, setQuestionSuccessResponse] = useState<IQuestionResponse | null>(null);
+  const [questionsErrorResponse, setQuestionsErrorResponse] = useState<IQuestionErrorResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [evaluatePayload, setEvaluatePayload] = useState<IEvaluatePayload>({
     quizId: "",
     category: "",
     answers: [],
   });
+  const [evaluateResponse, setEvaluateResponse] = useState<IEvaluateResponse | null>(null);
+  const [evaluateSuccessModalVisible, setEvaluateSuccessModalVisible] = useState<boolean>(false);
+  const [retryLoading, setRetryLoading] = useState<boolean>(false);
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const getQuestions = useCallback(async () => {
+    if (session?.user?.accessToken && router?.query?.sport) {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `api/quiz/get?category=${router?.query?.sport}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${session?.user?.accessToken}`,
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
+        if (!response.ok) {
+          const errorData = await response.json();
+          setQuestionsErrorResponse(errorData);
+          setLoading(false);
+          throw new Error(errorData.message || "Failed to get questions");
+        }
+        const questionsData = await response.json();
+        setQuestionSuccessResponse(questionsData);
+        setLoading(false);
+      } catch (e) {
+        console.error(e);
+        setLoading(false);
+      }
+    }
+  }, [session?.user?.accessToken, router?.query?.sport]);
 
   useEffect(() => {
-    const getQuestions = async () => {
-      if (session?.user?.accessToken && router?.query?.sport) {
-        try {
-          setLoading(true);
-          const response = await fetch(
-            `api/quiz/get?category=${router?.query?.sport}`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${session?.user?.accessToken}`,
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-            }
-          );
-          if (!response.ok) {
-            const errorData = await response.json();
-            setErrorMessage(errorData.message);
-            setLoading(false);
-            throw new Error(errorData.message || "Failed to get questions");
-          }
-          const questionsData = await response.json();
-          setQuestionResponse(questionsData);
-          setLoading(false);
-        } catch (e) {
-          console.error(e);
-          setLoading(false);
-        }
-      }
-    };
-
     getQuestions();
-  }, [session?.user?.accessToken, router?.query?.sport, session?.user?.level]);
+  }, [getQuestions]);
 
   const evaluateQuiz = async (data: IEvaluatePayload) => {
     try {
+      setLoading(true);
       const response = await fetch(`api/quiz/evaluate`, {
         method: "POST",
         headers: {
@@ -103,14 +121,16 @@ const LearningContent = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setErrorMessage(errorData.message);
         setLoading(false);
         throw new Error(errorData.message || "Failed to evaluate");
       }
       const result = await response.json();
-      console.log(result);
+      setEvaluateResponse(result);
+      setEvaluateSuccessModalVisible(true);
+      setLoading(false);
     } catch (err) {
       console.log(err);
+      setLoading(false);
     }
   };
 
@@ -118,121 +138,202 @@ const LearningContent = () => {
     evaluateQuiz(data);
   };
 
+  const reset = () => {
+    setEvaluateResponse(null);
+    setEvaluateSuccessModalVisible(false);
+    setRetryLoading(false);
+    setEvaluatePayload({
+      quizId: "",
+      category: "",
+      answers: [],
+    });
+  }
+
+  const handleCancel = () => {
+    reset();
+    router.push('/learning');
+  }
+
+  const handleRetry = async () => {
+    setRetryLoading(true);
+    try {
+      await getQuestions();
+    } catch (error) {
+      console.error("Error on retry:", error);
+    } finally {
+      setTimeout(() => {
+        reset();
+      }, 500);
+    }
+  }
+
+  const exitConfig = {
+    title: 'Are you sure you want to exit the exam?',
+    content: <>
+      <p>Your answers may not be saved.</p>
+      <strong>Note : </strong> Exiting will be considered as a submission.
+    </>,
+    okText: 'Yes',
+    cancelText: 'No',
+    onOk: handleCancel
+  };
+
   return (
-    <div className={styles.container}>
-      {/* Discard Button at Top Right */}
-      <div className={styles.discardContainer}>
-        <button
-          className={styles.discardButton}
-          onClick={() => setIsModalVisible(true)}
-        >
-          Discard
-        </button>
-      </div>
+    <>
+      <Spin spinning={loading} size="large">
+        {contextHolder}
+        <div className={styles.container}>
+          <div className={styles.leftPanel}>
+            {
+              questionSuccessResponse || questionsErrorResponse ?
+                <>
+                  <h1>Learning Content - {router?.query?.sport}</h1>
+                  <div className={styles.levels}>
+                    {
+                      levels.map((level, index) => {
+                        const currentIndex = levels.indexOf(questionSuccessResponse?.level || questionsErrorResponse?.level || undefined);
+                        const isCompleted = currentIndex !== 4 && index < currentIndex;
+                        const isCurrent = index === currentIndex;
+                        const isLocked = currentIndex === 4 || index > currentIndex;
 
-      {/* Discard Confirmation Modal */}
-      <Modal
-        title="Are You Sure, u Want to Exit?"
-        open={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        footer={[
-          <Button key="no" onClick={() => setIsModalVisible(false)}>
-            No
-          </Button>,
-          <Button
-            key="yes"
-            type="primary"
-            danger
-            onClick={() => router.push("/learning")}
-          >
-            Yes
-          </Button>,
-        ]}
-      >
-        <p>All progress will be lost if you exit.</p>
-      </Modal>
-
-      <div className={styles.leftPanel}>
-        <h1>Learning Content - {router?.query?.sport}</h1>
-
-        <div className={styles.levels}>
-          {levels.map((level) => (
-            <button
-              key={level}
-              className={`${styles.levelButton} ${
-                questionResponse?.level === level ? styles.activeLevel : ""
-              }`}
-            >
-              {questionResponse?.level !== level ? (
-                <div className={styles.lockIcon}>
-                  <FiLock />
-                </div>
-              ) : null}
-              {level.toUpperCase()}
-            </button>
-          ))}
-        </div>
-
-        <div className={styles.submitContainer}>
-          <button
-            className={styles.submitButton}
-            onClick={() => onSubmit(evaluatePayload)}
-            disabled={evaluatePayload?.answers?.length !== 5}
-          >
-            Submit
-          </button>
-        </div>
-      </div>
-
-      <div className={styles.rightPanel}>
-        {loading ? (
-          <Loader className={styles.loader} />
-        ) : (
-          <>
-            <div className={styles.contentContainer}>
-              <p className={styles.content}>{questionResponse.content}</p>
-            </div>
-            <div className={styles.quizContainer}>
-              {questionResponse?.questions?.length > 0 ? (
-                questionResponse?.questions?.map((question, index: number) => (
-                  <div key={index} className={styles.questionContainer}>
-                    <p className={styles.question}>{question.question}</p>
-                    <Radio.Group
-                      key={question.id}
-                      style={style}
-                      className={styles.option}
-                      onChange={(event) => {
-                        setEvaluatePayload({
-                          quizId: questionResponse.id,
-                          category: router?.query?.sport as string,
-                          answers: [
-                            ...evaluatePayload.answers.filter(
-                              (ans) => ans.questionId !== question.id
-                            ), // Remove previous answer for the same question
-                            {
-                              questionId: question.id,
-                              selectedOption: event.target.value,
-                            },
-                          ],
-                        });
-                      }}
-                    >
-                      {question.options.map((option) => (
-                        <Radio key={option} value={option}>
-                          {option}
-                        </Radio>
-                      ))}
-                    </Radio.Group>
+                        if (level && level !== QuizLevelEnum.COMPLETED) {
+                          return (
+                            <div
+                              key={level}
+                              className={`${styles.levelBox} 
+                                ${isCompleted ? styles.completed : ""} 
+                                ${isCurrent ? styles.current : ""}
+                                ${isLocked ? styles.locked : ""}`
+                              }
+                            >
+                              {isLocked && <LockFilled className={styles.lockIcon} />}
+                              {isCurrent && <EditOutlined className={styles.editIcon} />}
+                              {isCompleted && <CheckCircleFilled className={styles.checkIcon} />}
+                              <span>{level.toUpperCase()}</span>
+                            </div>
+                          );
+                        }
+                        return;
+                      })
+                    }
                   </div>
-                ))
-              ) : (
-                <p>{errorMessage}</p>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+                </>
+                :
+                <Skeleton />
+            }
+            {
+              questionSuccessResponse &&
+              <div className={styles.submitContainer}>
+                <button
+                  className={styles.submitButton}
+                  onClick={() => onSubmit(evaluatePayload)}
+                  disabled={evaluatePayload?.answers?.length !== 5}
+                >
+                  Submit
+                </button>
+              </div>
+            }
+          </div>
+          <div className={styles.rightPanel}>
+            {
+              questionSuccessResponse ?
+                <>
+                  <Row className={styles.headerWrapper}>
+                    <Col span={20}>
+                      <Text className={styles.noteWrapper}><strong>Note:</strong> You need to answer at least 3 questions correctly to progress to the next level.</Text>
+                    </Col>
+                    <Col span={4} className={styles.discardButtonWrapper}>
+                      <Button
+                        type="default"
+                        className={styles.discardButton}
+                        onClick={() => modal.confirm(exitConfig)}
+                        icon={<CloseCircleOutlined />}
+                      >
+                        EXIT
+                      </Button>
+                    </Col>
+                  </Row>
+                  <div className={styles.contentContainer}>
+                    <p className={styles.content}>{questionSuccessResponse.content}</p>
+                  </div>
+                  <div className={styles.quizContainer}>
+                    {
+                      questionSuccessResponse?.questions?.map(
+                        (question, index: number) => (
+                          <div key={index} className={styles.questionContainer}>
+                            <p className={styles.question}>{question.question}</p>
+                            <Radio.Group
+                              key={question.id}
+                              style={style}
+                              className={styles.option}
+                              onChange={(event) => {
+                                setEvaluatePayload({
+                                  quizId: questionSuccessResponse.id,
+                                  category: router?.query?.sport as string,
+                                  answers: [
+                                    ...evaluatePayload.answers.filter((ans) => ans.questionId !== question.id), // Remove previous answer for the same question
+                                    { questionId: question.id, selectedOption: event.target.value }
+                                  ]
+                                });
+                              }}
+                            >
+                              {question.options.map((option) => (
+                                <Radio key={option} value={option}>
+                                  {option}
+                                </Radio>
+                              ))}
+                            </Radio.Group>
+                          </div>
+                        )
+                      )
+                    }
+                  </div>
+                </>
+                :
+                questionsErrorResponse ?
+                  <Result
+                    status={questionsErrorResponse.level === QuizLevelEnum.COMPLETED ? "success" : 'error'}
+                    title={questionsErrorResponse?.message}
+                    extra={[
+                      <Button type="primary" key="console" onClick={() => handleCancel()}>
+                        BACK
+                      </Button>,
+                    ]}
+                  />
+                  :
+                  <Skeleton />
+            }
+          </div>
+        </div>
+        {
+          evaluateResponse && evaluateSuccessModalVisible &&
+          < Modal
+            open={evaluateResponse && evaluateSuccessModalVisible}
+            maskClosable={false}
+            closable={false}
+            title={
+              <div className={styles.successModalTitleWrapper}>
+                {
+                  evaluateResponse?.isCleared ?
+                    <SmileOutlined className={styles.successIcon} />
+                    :
+                    <FrownOutlined className={styles.failIcon} />
+                }
+              </div>
+            }
+            okText={evaluateResponse?.isCleared ? 'Proceed to Next Level' : 'Retry'}
+            onCancel={handleCancel}
+            onOk={handleRetry}
+            confirmLoading={retryLoading}
+          >
+            <>
+              <p>{`You scored ${evaluateResponse?.score} points`}</p>
+              <p>{evaluateResponse?.message}</p>
+            </>
+          </Modal>
+        }
+      </Spin >
+    </>
   );
 };
 

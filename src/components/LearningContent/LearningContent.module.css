@@ -1,224 +1,238 @@
 .container {
-  display: flex;
-  min-height: 90vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  margin: 20px;
+    display: flex;
+    min-height: 90vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    margin: 20px;
 }
 
 .leftPanel {
-  flex: 1;
-  padding: 30px;
-  background: linear-gradient(180deg, #2c3e50 0%, #1a2a38 100%);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  max-width: 300px;
+    flex: 1;
+    padding: 30px;
+    background: linear-gradient(180deg, #2c3e50 0%, #1a2a38 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 300px;
 }
 
 .leftPanel h1 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-transform: capitalize;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid #3498db;
-  padding-bottom: 16px;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 16px;
 }
 
-.discardContainer {
-  position: absolute;
-  top: 70px;
-  right: 20px;
-  z-index: 10;
-}
-res it appears above .discardButton {
-  background-color: #ff4d4f;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  cursor: pointer;
-  border-radius: 4px;
+.discardButton {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
 .levels {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.levelButton {
-  position: relative;
-  padding: 14px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+.levelBox {
+    position: relative;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 100px;
+    text-transform: uppercase;
+    height: 50px;
 }
 
-.levelButton:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+/* Completed Levels */
+.completed {
+    background-color: #4caf50; /* Green */
+    color: white;
 }
 
-.levelButton:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+/* Current Level */
+.current {
+    background: #3498db;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
 }
 
-.activeLevel {
-  background: #3498db;
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+/* Locked Levels */
+.locked {
+    background-color: #ddd;
+    color: #888;
+    position: relative;
 }
 
-.activeLevel:hover {
-  background: #2980b9;
-}
-
+/* Lock Icon */
 .lockIcon {
-  font-size: 16px;
-  margin-right: 4px;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Check Mark for Completed */
+.completedText {
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.lockIcon,
+.editIcon,
+.checkIcon {
+    font-size: 20px;
+    margin-right: 4px;
 }
 
 .submitContainer {
-  margin-top: auto;
+    margin-top: auto;
 }
 
 .submitButton {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
 }
 
 .submitButton:hover {
-  background: linear-gradient(135deg, #2980b9 0%, #1c5a85 100%);
-  transform: translateY(-2px);
+    background: linear-gradient(135deg, #2980b9 0%, #1c5a85 100%);
+    transform: translateY(-2px);
 }
 
 .rightPanel {
-  flex: 3;
-  padding: 30px;
-  overflow-y: auto;
-  position: relative;
+    flex: 3;
+    padding: 10px 30px;
+    overflow-y: auto;
+    position: relative;
 }
 
-.loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: spin 1.5s linear infinite;
-  color: #3498db;
-  font-size: 24px;
+.headerWrapper {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+
+    .noteWrapper {
+        font-size: large;
+    }
+
+    .discardButtonWrapper {
+        display: flex;
+        justify-content: flex-end;
+    }
 }
 
 @keyframes spin {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
 .contentContainer {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .content {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #34495e;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #34495e;
 }
 
 .quizContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .questionContainer {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
 }
 
 .questionContainer:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .question {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  color: #2c3e50;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #2c3e50;
 }
 
 .option {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 12px;
-  padding: 10px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-}
-
-.option:hover {
-  background-color: #f5f7fa;
-}
-
-.option input[type="radio"] {
-  margin-right: 12px;
-  accent-color: #3498db;
-  width: 18px;
-  height: 18px;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
 }
 
 .option label {
-  font-size: 16px;
-  color: #34495e;
-  cursor: pointer;
-  flex: 1;
+    font-size: 16px;
+    color: #34495e;
+    cursor: pointer;
+    flex: 1;
 }
 
 @media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
+    .container {
+        flex-direction: column;
+    }
 
-  .leftPanel {
-    max-width: none;
-    padding: 20px;
-  }
+    .leftPanel {
+        max-width: none;
+        padding: 20px;
+    }
 
-  .rightPanel {
-    padding: 20px;
-  }
+    .rightPanel {
+        padding: 20px;
+    }
+}
+
+.successModalTitleWrapper {
+    display: flex;
+    justify-content: center;
+    font-size: xxx-large;
+
+    .failIcon {
+        color: red;
+    }
+
+    .successIcon {
+        color: green;
+    }
 }
