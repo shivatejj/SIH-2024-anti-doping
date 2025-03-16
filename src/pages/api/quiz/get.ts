@@ -29,7 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    if (userStat.level === QuizLevelEnum.COMPLETED) return res.status(403).json({ message: `Quiz with ${category} category is completed` });
+    if (userStat.level === QuizLevelEnum.COMPLETED) return res.status(403).json({
+      message: `Quiz with ${category} category is completed`,
+      level: QuizLevelEnum.COMPLETED
+    });
 
     const quiz = await Quiz.findOne({ category: category, level: userStat.level });
 
