@@ -2,8 +2,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { connectDB } from "@/lib/mongodb";
 import { isAuthenticated } from "@/middleware/auth";
 import UserStats from "@/models/UserStats";
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "GET") return res.status(405).json({ message: "Method not allowed" });
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== "GET")
+    return res.status(405).json({ message: "Method not allowed" });
 
   try {
     const { category } = req.query;
@@ -13,19 +17,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    if (!category) return res.status(400).json({ message: 'Category is required' });
-
-    const searchQuery: Record<string, string> = { userId: user.userId }
+    const searchQuery: Record<string, string> = { userId: user.userId };
 
     if (category) searchQuery.category = category as string;
     const userStat = await UserStats.find(searchQuery);
 
     if (!userStat) {
-      return res.status(404).json({ message: 'No stats found' });
+      return res.status(404).json({ message: "No stats found" });
     }
 
     return res.status(200).json({ userStat });
-
   } catch (error) {
     if (typeof error === "object" && error !== null && "message" in error) {
       const err = error as { message: string; status?: number };
