@@ -45,6 +45,7 @@ interface IEvaluatePayload {
     questionId: string;
     selectedOption: string;
   }[];
+  isAutoSubmitted?: boolean;
 }
 
 interface IEvaluateResponse {
@@ -53,6 +54,7 @@ interface IEvaluateResponse {
   attempts: number;
   level: QuizLevelEnum;
   isCleared: boolean;
+  isCategoryCompleted: boolean;
 }
 
 const LearningContent = () => {
@@ -94,6 +96,11 @@ const LearningContent = () => {
         }
         const questionsData = await response.json();
         setQuestionSuccessResponse(questionsData);
+        setEvaluatePayload({
+          quizId: questionsData?.id,
+          category: router?.query?.sport as string,
+          answers: [],
+        });
         setLoading(false);
       } catch (e) {
         console.error(e);
@@ -125,8 +132,10 @@ const LearningContent = () => {
         throw new Error(errorData.message || "Failed to evaluate");
       }
       const result = await response.json();
-      setEvaluateResponse(result);
-      setEvaluateSuccessModalVisible(true);
+      if (!result.isAutoSubmitted) {
+        setEvaluateResponse(result);
+        setEvaluateSuccessModalVisible(true);
+      }
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -147,6 +156,26 @@ const LearningContent = () => {
       category: "",
       answers: [],
     });
+  }
+
+  const handleExitOk = async () => {
+    setRetryLoading(true);
+    try {
+      const data: IEvaluatePayload = {
+        quizId: questionSuccessResponse?.id as string,
+        category: router?.query?.sport as string,
+        answers: [],
+        isAutoSubmitted: true,
+      }
+      await evaluateQuiz(data);
+    } catch (error) {
+      console.error("Error on retry:", error);
+    } finally {
+      setTimeout(() => {
+        reset();
+        router.push('/learning');
+      }, 500);
+    }
   }
 
   const handleCancel = () => {
@@ -175,7 +204,7 @@ const LearningContent = () => {
     </>,
     okText: 'Yes',
     cancelText: 'No',
-    onOk: handleCancel
+    onOk: handleExitOk
   };
 
   return (
@@ -307,7 +336,7 @@ const LearningContent = () => {
         </div>
         {
           evaluateResponse && evaluateSuccessModalVisible &&
-          < Modal
+          <Modal
             open={evaluateResponse && evaluateSuccessModalVisible}
             maskClosable={false}
             closable={false}
@@ -325,6 +354,35 @@ const LearningContent = () => {
             onCancel={handleCancel}
             onOk={handleRetry}
             confirmLoading={retryLoading}
+            footer={
+              evaluateResponse?.isCategoryCompleted ?
+                [
+                  <Button
+                    key={'category-complete'}
+                    onClick={handleCancel}
+                  >
+                    BACK
+                  </Button>
+                ] :
+                [
+                  <>
+                    <Button
+                      key='cancel'
+                      type="default"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      key='retry'
+                      type="primary"
+                      onClick={handleRetry}
+                    >
+                      {evaluateResponse?.isCleared ? 'Proceed to Next Level' : 'Retry'}
+                    </Button>
+                  </>
+                ]
+            }
           >
             <>
               <p>{`You scored ${evaluateResponse?.score} points`}</p>
@@ -332,7 +390,7 @@ const LearningContent = () => {
             </>
           </Modal>
         }
-      </Spin >
+      </Spin>
     </>
   );
 };
