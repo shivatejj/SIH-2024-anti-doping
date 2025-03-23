@@ -1,0 +1,27 @@
+.container {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 1200px;
+    padding: 10px 30px 30px;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    border-radius: 15px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+    color: white;
+}
+
+.title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 36px;
+  font-weight: bold;
+  padding: 10px;
+  text-shadow: 2px 2px 10px rgba(236, 234, 224, 0.8);
+}
+
+.addQuiz {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
