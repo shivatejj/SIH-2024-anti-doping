@@ -10,8 +10,7 @@ const { Header, Content, Footer } = Layout;
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
   const { data: session } = useSession();
-
-  console.log(useAutoLogout());
+  useAutoLogout();
 
   // All available menu items
   const menuItems = [
