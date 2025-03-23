@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+    networks:
+      - antidoping-network
+
+  mongo:
+    image: mongo
+    container_name: antidoping-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: antidoping
+      MONGO_INITDB_ROOT_PASSWORD: Antidoping2025
+    networks:
+      - antidoping-network
+
+networks:
+  antidoping-network:
+    driver: bridge
