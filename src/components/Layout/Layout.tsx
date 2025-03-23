@@ -13,10 +13,11 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // All available menu items
   const menuItems = [
     { key: "/home", label: "Home" },
+    { key: "/admin-dashboard", label: "Home" },
     { key: "/game", label: "Fun-Game" },
     { key: "/learning", label: "Learning" },
     { key: "/leaderboard", label: "LeaderBoard" },
-    { key: "/addquiz", label: "Add Quiz" },
+    { key: "/quizzes", label: "Quizzes" },
   ];
 
   const userRole = session?.user?.role || "user";
@@ -24,9 +25,9 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const filteredMenuItems =
     userRole === "admin"
       ? menuItems.filter((item) =>
-          ["/home", "/leaderboard", "/addquiz"].includes(item.key)
-        )
-      : menuItems.filter((item) => item.key !== "/addquiz"); // Non-admin users cannot see Add Quiz
+        ["/admin-dashboard", "/leaderboard", "/quizzes"].includes(item.key)
+      )
+      : menuItems.filter((item) => !["/admin-dashboard", "/quizzes"].includes(item.key));
 
   const currentTab =
     filteredMenuItems.find((item) => router.pathname.startsWith(item.key))
@@ -34,9 +35,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const profileMenu = (
     <Menu>
-      <Menu.Item key="profile" onClick={() => router.push("/profile")}>
-        Profile
-      </Menu.Item>
+      {
+        userRole === 'user' &&
+        <Menu.Item key="profile" onClick={() => router.push("/profile")}>
+          Profile
+        </Menu.Item>
+      }
       <Menu.Item
         key="logout"
         onClick={() => signOut({ callbackUrl: "/login" })}
@@ -50,7 +54,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <Layout className={styles.layout}>
       {/* Header Section */}
       <Header className={styles.header}>
-        <div className={styles.logo} onClick={() => router.push("/home")}>
+        <div className={styles.logo} onClick={() => userRole === 'admin' ? router.push("/admin-dashboard") : router.push("/home")}>
           Anti-Doping Education
         </div>
         <Menu
@@ -91,7 +95,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       {/* Footer Section */}
       <Footer className={styles.footer}>
-        © 2025 My App. All rights reserved.
+        © 2025 Anti Doping. All rights reserved.
       </Footer>
     </Layout>
   );

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Form, Input, Select, Button, Modal, Card, Space } from "antd";
+import { Form, Input, Select, Button, Modal, Card, Row, Col } from "antd";
 import { useSession } from "next-auth/react";
+import styles from "./AddQuiz.module.css";
 
 const { Option } = Select;
 
@@ -71,7 +72,7 @@ const AddQuiz = () => {
   };
 
   return (
-    <Card title="Add New Quiz" style={{ maxWidth: 600, margin: "auto" }}>
+    <Card title="Add New Quiz" className={styles.container}>
       <Form
         form={form}
         layout="vertical"
@@ -110,7 +111,7 @@ const AddQuiz = () => {
           <Card
             key={index}
             title={`Question ${index + 1}`}
-            style={{ marginBottom: 16 }}
+            className={styles.questionBlock}
           >
             <Form.Item label="Question" required>
               <Input
@@ -122,23 +123,26 @@ const AddQuiz = () => {
               />
             </Form.Item>
 
-            <Space style={{ display: "flex", flexWrap: "wrap" }}>
+            <Row gutter={[8, 8]}>
               {q.options.map((opt, optIndex) => (
-                <Input
-                  key={optIndex}
-                  style={{ width: "48%" }}
-                  placeholder={`Option ${optIndex + 1}`}
-                  value={opt}
-                  onChange={(e) =>
-                    handleQuestionChange(
-                      index,
-                      `option${optIndex}`,
-                      e.target.value
-                    )
-                  }
-                />
+                <Col key={optIndex} xs={24} sm={24} md={12} lg={12}>
+                  <Form.Item required>
+                    <Input
+                      key={optIndex}
+                      placeholder={`Option ${optIndex + 1}`}
+                      value={opt}
+                      onChange={(e) =>
+                        handleQuestionChange(
+                          index,
+                          `option${optIndex}`,
+                          e.target.value
+                        )
+                      }
+                    />
+                  </Form.Item>
+                </Col>
               ))}
-            </Space>
+            </Row>
 
             <Form.Item label="Correct Answer" required>
               <Input
