@@ -1,21 +1,33 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import jwt from "jsonwebtoken";
+import { useEffect } from "react";
+import { useSession, signOut } from "next-auth/react";
+import { jwtDecode } from "jwt-decode";
 
-const SECRET_KEY = process.env.JWT_SECRET!;
+const useAutoLogout = () => {
+  const { data: session } = useSession();
 
-export const authenticateJWT = (req: NextApiRequest, res: NextApiResponse) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
+  useEffect(() => {
+    if (!session?.user?.accessToken) return;
 
-  const token = authHeader.split(" ")[1];
+    try {
+      const decoded: { exp: number } = jwtDecode(session.user.accessToken);
+      const expiryTime = decoded.exp * 1000;
+      const currentTime = Date.now();
+      const timeRemaining = expiryTime - currentTime;
 
-  try {
-    const decoded = jwt.verify(token, SECRET_KEY) as { id: string; email: string; role: string };
-    return decoded;
-  } catch (error) {
-    console.error(error);
-    return res.status(403).json({ error: "Invalid token" });
-  }
+      if (timeRemaining <= 0) {
+        signOut();
+      } else {
+        const timer = setTimeout(() => {
+          signOut();
+        }, timeRemaining);
+
+        return () => clearTimeout(timer);
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      signOut();
+    }
+  }, [session?.user?.accessToken]);
 };
+
+export default useAutoLogout;

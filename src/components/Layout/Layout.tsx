@@ -3,12 +3,15 @@ import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 import { UserOutlined } from "@ant-design/icons";
 import styles from "./Layout.module.css";
+import useAutoLogout from "@/utils/auth";
 
 const { Header, Content, Footer } = Layout;
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
   const { data: session } = useSession();
+
+  console.log(useAutoLogout());
 
   // All available menu items
   const menuItems = [
